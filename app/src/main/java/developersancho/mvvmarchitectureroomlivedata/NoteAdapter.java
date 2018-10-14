@@ -15,6 +15,7 @@ import developersancho.mvvmarchitectureroomlivedata.data.entity.Note;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
     private List<Note> notes = new ArrayList<>();
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -44,7 +45,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     }
 
 
-    public Note getNoteAt(int position){
+    public Note getNoteAt(int position) {
         return notes.get(position);
     }
 
@@ -59,8 +60,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             textViewTitle = (TextView) itemView.findViewById(R.id.text_view_title);
             textViewDescription = (TextView) itemView.findViewById(R.id.text_view_description);
             textViewPriority = (TextView) itemView.findViewById(R.id.text_view_priority);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION)
+                        listener.onItemClick(notes.get(position));
+                }
+            });
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Note note);
+    }
 
+    // MainActivity classında kullanacaksın...
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 }
